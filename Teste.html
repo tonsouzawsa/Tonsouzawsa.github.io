@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste PDF</title>
+</head>
+<body>
+  <h1>Gerador de Orçamento</h1>
+
+  <textarea id="texto" rows="10" cols="50">Digite aqui o conteúdo do orçamento...</textarea><br><br>
+  <button onclick="gerarPDF()">Salvar em PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    function gerarPDF() {
+      const { jsPDF } = window.jspdf;
+      const texto = document.getElementById("texto").value;
+      const doc = new jsPDF();
+      doc.text(texto, 10, 10);
+      doc.save("orcamento_teste.pdf");
+    }
+  </script>
+</body>
+</html>
