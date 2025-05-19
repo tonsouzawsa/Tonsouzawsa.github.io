@@ -3,36 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Orçamento de Obra</title>
+  <title>Orçamento de Obra - App Editável</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; max-width: 500px; }
-    h2, h3 { text-align: center; }
-    label { display: block; margin-top: 15px; }
-    input[type="text"], input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-    .servico { margin-top: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-    .servico label { display: inline-block; margin-right: 10px; }
-    button { margin-top: 20px; width: 100%; padding: 10px; font-size: 16px; cursor: pointer; }
-    pre { background: #eee; padding: 15px; margin-top: 20px; white-space: pre-wrap; }
-    .logo { text-align: center; margin-top: 20px; }
-    .logo img { width: 150px; max-width: 100%; height: auto; }
-    .missao, .visao, .valores {
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      max-width: 600px;
+      background: #fafafa;
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      resize: vertical;
+    }
+    .servico {
+      margin-top: 15px;
+      padding: 15px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      background: #fff;
+      position: relative;
+    }
+    .servico .remover-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #e74c3c;
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button, .btn-add {
       margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover, .btn-add:hover {
+      background-color: #0056b3;
+    }
+    #resultado {
+      background: #eee;
+      padding: 15px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      border-radius: 8px;
+      min-height: 150px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo img {
+      max-width: 180px;
+      max-height: 100px;
+      object-fit: contain;
+    }
+    .editable-section {
+      margin-top: 30px;
+      background: white;
       padding: 15px;
       border-radius: 8px;
-      box-shadow: 0 0 5px #ccc;
+      box-shadow: 0 0 7px #ccc;
     }
-    .missao { background-color: #f9f9f9; }
-    .visao { background-color: #f1f1f1; }
-    .valores { background-color: #e9e9e9; }
+    .editable-section h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
 
   <div class="logo">
-    <img src="logo.png" alt="Logo da Empresa" />
+    <label for="logoUpload"><strong>Upload da Logo da Empresa:</strong></label>
+    <input type="file" id="logoUpload" accept="image/*" />
+    <div id="logoPreview" style="margin-top: 10px;"></div>
   </div>
 
-  <h2>Orçamento de Obra</h2>
+  <h2>Orçamento de Obra - App Editável</h2>
 
   <label>Localização:
     <input type="text" id="local" placeholder="Ex: Bairro Villa Verde" />
@@ -46,78 +116,71 @@
     <input type="number" id="area" min="0" step="0.1" />
   </label>
 
-  <div class="servico">
-    <input type="checkbox" id="limpeza" />
-    <label for="limpeza">Limpeza</label><br />
-    Material (R$): <input type="number" id="limpeza_mat" min="0" step="0.01" disabled /><br />
-    Mão de obra (R$): <input type="number" id="limpeza_mao" min="0" step="0.01" disabled />
-  </div>
-
-  <div class="servico">
-    <input type="checkbox" id="fundacao" />
-    <label for="fundacao">Fundação</label><br />
-    Material (R$): <input type="number" id="fundacao_mat" min="0" step="0.01" disabled /><br />
-    Mão de obra (R$): <input type="number" id="fundacao_mao" min="0" step="0.01" disabled />
-  </div>
-
-  <div class="servico">
-    <input type="checkbox" id="estrutura" />
-    <label for="estrutura">Estrutura</label><br />
-    Material (R$): <input type="number" id="estrutura_mat" min="0" step="0.01" disabled /><br />
-    Mão de obra (R$): <input type="number" id="estrutura_mao" min="0" step="0.01" disabled />
-  </div>
-
-  <div class="servico">
-    <input type="checkbox" id="eletrica" />
-    <label for="eletrica">Elétrica</label><br />
-    Material (R$): <input type="number" id="eletrica_mat" min="0" step="0.01" disabled /><br />
-    Mão de obra (R$): <input type="number" id="eletrica_mao" min="0" step="0.01" disabled />
-  </div>
-
-  <div class="servico">
-    <input type="checkbox" id="acabamento" />
-    <label for="acabamento">Acabamento</label><br />
-    Material (R$): <input type="number" id="acabamento_mat" min="0" step="0.01" disabled /><br />
-    Mão de obra (R$): <input type="number" id="acabamento_mao" min="0" step="0.01" disabled />
+  <div>
+    <h3>Serviços</h3>
+    <div id="servicosContainer"></div>
+    <button class="btn-add" type="button" onclick="adicionarServico()">+ Adicionar Serviço</button>
   </div>
 
   <button onclick="calcularOrcamento()">Calcular Orçamento</button>
+  <button onclick="baixarPDF()">Salvar em PDF</button>
 
   <pre id="resultado"></pre>
 
-  <div class="missao">
-    <h3>Missão</h3>
-    <p>Oferecer soluções em construção civil com excelência, atendendo às necessidades dos nossos clientes com qualidade e pontualidade.</p>
+  <div class="editable-section">
+    <h3>Missão (edite o texto abaixo)</h3>
+    <textarea id="missao" rows="3">Oferecer soluções em construção civil com excelência, atendendo às necessidades dos nossos clientes com qualidade e pontualidade.</textarea>
   </div>
 
-  <div class="visao">
-    <h3>Visão</h3>
-    <p>Ser reconhecida como referência em inovação e sustentabilidade no setor da construção civil.</p>
+  <div class="editable-section">
+    <h3>Visão (edite o texto abaixo)</h3>
+    <textarea id="visao" rows="3">Ser reconhecida como referência em inovação e sustentabilidade no setor da construção civil.</textarea>
   </div>
 
-  <div class="valores">
-    <h3>Valores</h3>
-    <ul>
-      <li>Compromisso</li>
-      <li>Qualidade</li>
-      <li>Transparência</li>
-      <li>Respeito</li>
-    </ul>
+  <div class="editable-section">
+    <h3>Valores (edite os itens abaixo, um por linha)</h3>
+    <textarea id="valores" rows="4">Compromisso
+Qualidade
+Transparência
+Respeito</textarea>
   </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-  const servicos = ['limpeza','fundacao','estrutura','eletrica','acabamento'];
-  servicos.forEach(s => {
-    document.getElementById(s).addEventListener('change', e => {
-      document.getElementById(s + '_mat').disabled = !e.target.checked;
-      document.getElementById(s + '_mao').disabled = !e.target.checked;
-      if (!e.target.checked) {
-        document.getElementById(s + '_mat').value = '';
-        document.getElementById(s + '_mao').value = '';
-      }
-    });
-  });
+  // Inicializa com 3 serviços padrão
+  const servicosContainer = document.getElementById('servicosContainer');
+  
+  function adicionarServico(nome = '', mat = '', mao = '') {
+    const idx = servicosContainer.children.length + 1;
+    const div = document.createElement('div');
+    div.className = 'servico';
 
+    div.innerHTML = `
+      <button type="button" class="remover-btn" onclick="removerServico(this)">X</button>
+      <label>Nome do Serviço:
+        <input type="text" class="nome-servico" placeholder="Ex: Limpeza" value="${nome}" required />
+      </label>
+      <label>Material (R$):
+        <input type="number" class="material" min="0" step="0.01" value="${mat}" required />
+      </label>
+      <label>Mão de obra (R$):
+        <input type="number" class="mao-obra" min="0" step="0.01" value="${mao}" required />
+      </label>
+    `;
+    servicosContainer.appendChild(div);
+  }
+
+  function removerServico(button) {
+    const div = button.parentElement;
+    servicosContainer.removeChild(div);
+  }
+
+  // Inicializa com alguns serviços para facilitar
+  adicionarServico('Limpeza');
+  adicionarServico('Fundação');
+  adicionarServico('Estrutura');
+
+  // Calcular orçamento
   function calcularOrcamento() {
     const local = document.getElementById('local').value.trim();
     const tipo = document.getElementById('tipo').value.trim();
@@ -128,34 +191,43 @@
       return;
     }
 
+    const servicosEls = servicosContainer.querySelectorAll('.servico');
+    if (servicosEls.length === 0) {
+      alert('Adicione ao menos um serviço.');
+      return;
+    }
+
     let totalMaterial = 0;
     let totalMao = 0;
     let servicosSelecionados = [];
 
-    for (let s of servicos) {
-      if (document.getElementById(s).checked) {
-        let mat = parseFloat(document.getElementById(s + '_mat').value);
-        let mao = parseFloat(document.getElementById(s + '_mao').value);
+    for (let div of servicosEls) {
+      const nome = div.querySelector('.nome-servico').value.trim();
+      const mat = parseFloat(div.querySelector('.material').value);
+      const mao = parseFloat(div.querySelector('.mao-obra').value);
 
-        if (isNaN(mat) || mat < 0 || isNaN(mao) || mao < 0) {
-          alert('Informe valores válidos para materiais e mão de obra em ' + s.charAt(0).toUpperCase() + s.slice(1));
-          return;
-        }
-        servicosSelecionados.push(s.charAt(0).toUpperCase() + s.slice(1));
-        totalMaterial += mat;
-        totalMao += mao;
+      if (!nome) {
+        alert('Informe o nome do serviço em todos os serviços.');
+        return;
       }
-    }
-
-    if (servicosSelecionados.length === 0) {
-      alert('Selecione ao menos um serviço.');
-      return;
+      if (isNaN(mat) || mat < 0 || isNaN(mao) || mao < 0) {
+        alert(`Informe valores válidos para materiais e mão de obra no serviço "${nome}".`);
+        return;
+      }
+      servicosSelecionados.push(nome);
+      totalMaterial += mat;
+      totalMao += mao;
     }
 
     const total = totalMaterial + totalMao;
     const sinal = total * 0.3;
     const meio = total * 0.4;
     const final = total * 0.3;
+
+    const missao = document.getElementById('missao').value.trim();
+    const visao = document.getElementById('visao').value.trim();
+    const valoresRaw = document.getElementById('valores').value.trim();
+    const valoresList = valoresRaw ? valoresRaw.split('\n').map(v => v.trim()).filter(v => v) : [];
 
     let texto = `Orçamento para obra em ${local}\n`;
     texto += `Tipo de obra: ${tipo}\n`;
@@ -164,9 +236,67 @@
     for (let s of servicosSelecionados) texto += `- ${s}\n`;
     texto += `\nCustos:\n- Materiais: R$ ${totalMaterial.toFixed(2)}\n- Mão de obra: R$ ${totalMao.toFixed(2)}\n`;
     texto += `Total: R$ ${total.toFixed(2)}\n\n`;
-    texto += `Formas de pagamento:\n- Sinal (30%): R$ ${sinal.toFixed(2)}\n- Durante a obra (40%): R$ ${meio.toFixed(2)}\n- Na entrega (30%): R$ ${final.toFixed(2)}\n`;
+    texto += `Formas de pagamento:\n- Sinal (30%): R$ ${sinal.toFixed(2)}\n- Durante a obra (40%): R$ ${meio.toFixed(2)}\n- Na entrega (30%): R$ ${final.toFixed(2)}\n\n`;
+
+    texto += `Missão:\n${missao}\n\n`;
+    texto += `Visão:\n${visao}\n\n`;
+    texto += `Valores:\n`;
+    valoresList.forEach(v => texto += `- ${v}\n`);
 
     document.getElementById('resultado').textContent = texto;
+  }
+
+  // Upload e preview da logo
+  const logoUpload = document.getElementById('logoUpload');
+  const logoPreview = document.getElementById('logoPreview');
+  let logoDataUrl = '';
+
+  logoUpload.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      logoDataUrl = event.target.result;
+      logoPreview.innerHTML = `<img src="${logoDataUrl}" alt="Logo da Empresa" />`;
+    }
+    reader.readAsDataURL(file);
+  });
+
+  // Salvar em PDF com jsPDF
+  async function baixarPDF() {
+    const { jsPDF } = window.jspdf;
+
+    calcularOrcamento(); // garante que texto está atualizado
+    const texto = document.getElementById('resultado').textContent;
+    if (!texto) {
+      alert('Calcule o orçamento antes de salvar o PDF.');
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    // Se tiver logo, adiciona
+    if (logoDataUrl) {
+      // tenta adicionar logo centralizado com largura max 100
+      const imgProps = doc.getImageProperties(logoDataUrl);
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const scale = Math.min(100 / imgProps.width, 1);
+      const imgWidth = imgProps.width * scale;
+      const imgHeight = imgProps.height * scale;
+      doc.addImage(logoDataUrl, 'PNG', (pdfWidth - imgWidth) / 2, 10, imgWidth, imgHeight);
+      doc.setFontSize(16);
+      doc.text('Orçamento de Obra', pdfWidth / 2, 25 + imgHeight, { align: 'center' });
+    } else {
+      doc.setFontSize(20);
+      doc.text('Orçamento de Obra', doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+    }
+
+    doc.setFontSize(12);
+    const splitTexto = doc.splitTextToSize(texto, 180);
+    doc.text(splitTexto, 15, 50);
+
+    doc.save('orcamento_obra.pdf');
   }
 </script>
 
